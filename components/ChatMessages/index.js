@@ -1,11 +1,12 @@
 import React from "react";
-import { Text, View, ImageBackground } from "react-native";
+import { Text, View } from "react-native";
 import styles from "./style";
 
-const ChatMessage = (ChatMessageProps) => {
-  const { messsage } = ChatMessageProps;
+const ChatMessage = (props) => {
+  const item = props.message;
+
   const isMymessage = () => {
-    return messsage.user.id === "u1";
+    return item.messageSentby === "Keshav";
   };
 
   return (
@@ -26,14 +27,14 @@ const ChatMessage = (ChatMessageProps) => {
             alignSelf: isMymessage() ? "flex-end" : "flex-start",
           }}
         >
-          {messsage.user.name}
+          {item.messageSentby}
         </Text>
         <Text
           style={{
             alignSelf: isMymessage() ? "flex-end" : "flex-start",
           }}
         >
-          {messsage.content}
+          {item.message}
         </Text>
       </View>
     </View>

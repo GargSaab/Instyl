@@ -1,40 +1,34 @@
 import React from "react";
-import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
-import { ChatRoom } from "../../data/ChatRoom";
+import { View, Text, Image } from "react-native";
 import styles from "./style";
 import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const ChatListItemProps = {
-  chatRoom: ChatRoom,
-};
-
-const ChatListItem = (ChatListItemProps) => {
-  const { chatRoom } = ChatListItemProps;
-  const user = chatRoom.users[1];
-
+const ChatListItem = (props) => {
+  const item = props.data;
   const navigation = useNavigation();
+
   const OnClick = () => {
-    navigation.navigate("ChatRoomScreen", {
-      id: chatRoom.id,
-      name: user.name,
-      image: user.imageUri,
+    navigation.navigate("GroupCart", {
+      // id: item.docId,
+      // docid: item.groupId,
+      groupName: item.groupName,
+      // image: item.groupImage,
+      item: item,
     });
   };
 
   return (
-    <TouchableWithoutFeedback onPress={OnClick}>
+    <TouchableOpacity onPress={OnClick}>
       <View style={styles.container}>
         <View style={styles.lefContainer}>
-          <Image source={{ uri: user.imageUri }} style={styles.avatar} />
+          <Image source={{ uri: item.groupImage }} style={styles.avatar} />
           <View style={styles.midContainer}>
-            <Text style={styles.username}>{user.name}</Text>
-            <Text numberOfLines={1} style={styles.lastMessage}>
-              {chatRoom.lastMessage.content}
-            </Text>
+            <Text style={styles.username}>{item.groupName}</Text>
           </View>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 export default ChatListItem;

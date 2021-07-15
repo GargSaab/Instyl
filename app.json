@@ -2,8 +2,9 @@
   "expo": {
     "name": "Instyl",
     "slug": "Instyl",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
+    "sdkVersion": "41.0.0",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
@@ -18,17 +19,17 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.keshav_garg.Instyl"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "description": "",
+    "githubUrl": "https://github.com/GargSaab/Instyl"
   }
 }

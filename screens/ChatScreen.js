@@ -1,25 +1,108 @@
-import * as React from "react";
-import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { View } from "../components/Themed";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+  Text,
+  Image,
+  StatusBar,
+} from "react-native";
 import ChatListItem from "../components/ChatListItem";
-import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome5, AntDesign } from "@expo/vector-icons";
+import firebase from "../Firebase";
 
-import chatRooms from "../data/ChatRoom";
+export default function ChatScreen(props) {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function ChatScreen() {
+  const db = firebase.firestore();
+
+  const FetchData = async () => {
+    const uid = firebase.auth().currentUser.uid;
+    await db
+      .collection("users")
+      .doc(uid)
+      .collection("Groups")
+      .doc("groups")
+      .collection("LIVE")
+      .get()
+      .then((snapshot) => {
+        const data = [];
+        snapshot.forEach((doc) => {
+          data.push(doc.data());
+        });
+        setData(data);
+        setLoading(false);
+      });
+  };
+  useEffect(() => {
+    FetchData();
+    const willFocusSubscription = props.navigation.addListener("focus", () => {
+      FetchData();
+    });
+    return willFocusSubscription;
+  }, []);
   return (
     <View style={styles.container}>
-      <FlatList
-        style={{ width: "100%" }}
-        data={chatRooms}
-        renderItem={({ item }) => <ChatListItem chatRoom={item} />}
-        keyExtractor={(item) => item.id}
-      />
-      <View style={styles.addicon}>
-        <TouchableOpacity onPress={() => console.warn("Backend Not Used")}>
-          <AntDesign name="addusergroup" size={50} color="black" />
-        </TouchableOpacity>
+      <View
+        style={{
+          marginTop: StatusBar.currentHeight + 10,
+          borderBottomWidth: 1,
+          borderColor: "#D9D9D9",
+          padding: 5,
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ alignSelf: "center", fontSize: 22, fontWeight: "bold" }}>
+          Instyl
+        </Text>
+        <Image
+          source={require("../assets/icons/bag.png")}
+          style={{
+            height: 32,
+            width: 50,
+            resizeMode: "center",
+            position: "absolute",
+            right: 10,
+          }}
+        />
       </View>
+      <View style={styles.searchbox}>
+        <View style={styles.searchbox1}>
+          <AntDesign name="search1" size={24} color="black" />
+          <TextInput
+            placeholder="Find your shopping buddy"
+            style={styles.searchtext}
+          />
+        </View>
+      </View>
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color="#0000ff"
+          style={{ marginTop: "60%" }}
+        />
+      ) : (
+        <FlatList
+          style={{ width: "100%" }}
+          data={data}
+          renderItem={({ item }) => <ChatListItem data={item} />}
+          keyExtractor={(item) => item.groupName}
+        />
+      )}
+      {/* <View style={styles.addicon}>
+        <TouchableOpacity onPress={() => navigation.navigate("CreateGroups")}>
+          <Image
+            source={require("../assets/icons/addgrp.png")}
+            style={{ width: 55, height: 55, resizeMode: "center" }}
+          />
+        </TouchableOpacity>
+      </View> */}
     </View>
   );
 }
@@ -27,17 +110,39 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
+    overflow: "hidden",
   },
   addicon: {
     position: "absolute",
     right: 40,
     bottom: 40,
-    backgroundColor: "#fcfcfc",
+    backgroundColor: "#F5F5F5",
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
+  },
+  searchbox: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  searchbox1: {
+    flexDirection: "row",
+    backgroundColor: "#F4F4F4",
+    borderRadius: 20,
+    alignItems: "center",
+    paddingLeft: 15,
+    width: 303,
+    height: 38,
+  },
+  searchtext: {
+    marginLeft: 10,
+    width: 230,
   },
 });
