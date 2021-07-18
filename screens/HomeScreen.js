@@ -18,9 +18,9 @@ const HomeScreen = ({ navigation }) => {
   const [modal, setModal] = useState(false);
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
+  const db = firebase.firestore();
 
-  useEffect(() => {
-    const db = firebase.firestore();
+  const fetchData = async () => {
     db.collection("myStyle")
       .get()
       .then((snapshot) => {
@@ -48,6 +48,14 @@ const HomeScreen = ({ navigation }) => {
         snapshot.forEach((doc) => data.push(doc.data()));
         setItems(data);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
+    const willFocusSubscription = navigation.addListener("focus", () => {
+      fetchData();
+    });
+    return willFocusSubscription;
   }, []);
 
   return (
@@ -68,16 +76,22 @@ const HomeScreen = ({ navigation }) => {
             <AntDesign name="down" size={18} color="black" />
           </TouchableOpacity>
           <Text style={styles.instyltitle}>Instyl</Text>
-          <Image
-            source={require("../assets/icons/bag.png")}
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Myorders")}
             style={{
-              height: 32,
-              width: 50,
-              resizeMode: "center",
               position: "absolute",
               right: 10,
             }}
-          />
+          >
+            <Image
+              source={require("../assets/icons/bag.png")}
+              style={{
+                height: 32,
+                width: 50,
+                resizeMode: "center",
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View style={{ marginTop: 5 }}>
           <FlatList
@@ -125,6 +139,7 @@ const HomeScreen = ({ navigation }) => {
                       style={{
                         width: "100%",
                         height: 350,
+                        resizeMode: "cover",
                       }}
                     />
                   </TouchableWithoutFeedback>

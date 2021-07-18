@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
-import firebase from "../Firebase";
+
 function GroupCartScreen(props) {
   const item = props.route.params.item;
 

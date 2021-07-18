@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import firebase from "../Firebase";
+import { Checkbox } from "react-native-paper";
 
 function ShoppingBagGroup(props) {
   const { item } = props.route.params;
@@ -17,6 +18,9 @@ function ShoppingBagGroup(props) {
   const [t3, setT3] = useState(false);
   const [clr1, setClr1] = useState(false);
   const [clr2, setClr2] = useState(false);
+  const [checked1, setChecked1] = useState(false);
+  const [checked2, setChecked2] = useState(false);
+  const [checked3, setChecked3] = useState(false);
 
   const [data, setData] = useState("");
   const db = firebase.firestore();
@@ -95,7 +99,7 @@ function ShoppingBagGroup(props) {
         }}
       >
         <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>
-          PLACE ORDER
+          {t3 ? "PLACE ORDER" : "Continue"}
         </Text>
       </TouchableOpacity>
 
@@ -258,6 +262,107 @@ function ShoppingBagGroup(props) {
                   keyExtractor={(item) => item.add1}
                 />
               </ScrollView>
+            </View>
+          </View>
+        ) : null}
+        {t3 ? (
+          <View style={{ padding: 5 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                borderBottomWidth: 1,
+                borderColor: "#CFCFCF",
+                padding: 10,
+              }}
+            >
+              Select a payment methods:
+            </Text>
+            <View
+              style={{
+                padding: 10,
+                backgroundColor: "#FAFAFA",
+                borderWidth: 1,
+                borderColor: "#CFCFCF",
+                margin: 20,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  borderBottomWidth: 1,
+                  borderColor: "#CFCFCF",
+                  padding: 5,
+                  alignItems: "center",
+                }}
+              >
+                <Checkbox
+                  status={checked1 ? "checked" : "unchecked"}
+                  onPress={() => {
+                    setChecked1(!checked1);
+                    setChecked2(false);
+                    setChecked3(false);
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontWeight: "bold",
+                  }}
+                >
+                  UPI/Netbanking
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  borderBottomWidth: 1,
+                  borderColor: "#CFCFCF",
+                  padding: 5,
+                  alignItems: "center",
+                }}
+              >
+                <Checkbox
+                  status={checked2 ? "checked" : "unchecked"}
+                  onPress={() => {
+                    setChecked2(!checked2);
+                    setChecked3(false);
+                    setChecked1(false);
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Add Debit/Credit/ATM Card
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: 5,
+                  alignItems: "center",
+                }}
+              >
+                <Checkbox
+                  status={checked3 ? "checked" : "unchecked"}
+                  onPress={() => {
+                    setChecked3(!checked3);
+                    setChecked2(false);
+                    setChecked1(false);
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Pay on Delivery
+                </Text>
+              </View>
             </View>
           </View>
         ) : null}

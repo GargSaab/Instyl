@@ -25,11 +25,18 @@ function ProductScreen(props) {
   const [sizeSelected, setSizeSelected] = useState("Select a size");
   const [similardata, setSimilardata] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
   const data = [];
+  const db = firebase.firestore();
+
+  const handleSaved = async () => {
+    const uid = await firebase.auth().currentUser.uid;
+    await db.collection("users").doc(uid).collection("Saved").add({
+      item,
+    });
+  };
 
   useEffect(() => {
-    const db = firebase.firestore();
-    console.log(item.itemSimilar.length);
     if (item.itemSimilar.length > 0) {
       item.itemSimilar.map((id) => {
         db.collection("myStyle")
@@ -67,23 +74,30 @@ function ProductScreen(props) {
           zIndex: 5,
         }}
       >
-        <SimpleLineIcons
-          name="options-vertical"
-          size={29}
-          color="black"
-          style={{ marginLeft: 20 }}
-        />
-        <FontAwesome
-          name="bookmark-o"
-          size={30}
-          color="black"
-          style={{ marginLeft: 10 }}
-        />
+        {saved ? (
+          <FontAwesome
+            name="bookmark"
+            size={35}
+            color="black"
+            style={{ marginLeft: 25 }}
+          />
+        ) : (
+          <FontAwesome
+            name="bookmark-o"
+            size={35}
+            color="black"
+            style={{ marginLeft: 25 }}
+            onPress={() => {
+              setSaved(true);
+              handleSaved();
+            }}
+          />
+        )}
         <AntDesign
           name="hearto"
-          size={30}
+          size={35}
           color="black"
-          style={{ marginLeft: 15 }}
+          style={{ marginLeft: 20 }}
         />
         <View
           style={{

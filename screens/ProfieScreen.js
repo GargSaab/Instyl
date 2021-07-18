@@ -119,6 +119,7 @@ function ProfileScreen(props) {
           borderWidth: 1,
           borderColor: "#E5E5E5",
         }}
+        onPress={() => props.navigation.navigate("Saved")}
       >
         <Image
           source={require("../assets/icons/saved.png")}
@@ -157,6 +158,7 @@ function ProfileScreen(props) {
           borderColor: "#E5E5E5",
           justifyContent: "center",
         }}
+        onPress={() => props.navigation.navigate("Myorders")}
       >
         <Text style={{ fontSize: 16 }}>My Orders</Text>
         <Image

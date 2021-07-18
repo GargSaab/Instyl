@@ -32,6 +32,10 @@ import AddGroup from "../screens/AddGroup";
 import Adress from "../screens/Adress";
 import Addnewadress from "../screens/AddNewAdress";
 import firebase from "../Firebase";
+import MyOrders from "../screens/MyOrders";
+import Saved from "../screens/Saved";
+import CountDown from "react-native-countdown-component";
+import Activity from "../screens/Activity";
 
 const Drawer = createDrawerNavigator();
 
@@ -194,8 +198,44 @@ function RootNavigator() {
         options={({ navigation, route }) => ({
           headerShown: true,
           headerTitle: `${route.params.groupName}'s cart`,
-          headerTitleAlign: "center",
+          // headerTitleAlign: "center",
+          headerRight: () => (
+            <TouchableOpacity
+              style={{
+                marginRight: 15,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={() =>
+                navigation.navigate("Activity", {
+                  groupName: route.params.groupName,
+                })
+              }
+            >
+              {/* <CountDown
+                until={86400}
+                //duration of countdown in seconds
+                timetoShow={("H", "M", "S")}
+                //formate to show
+                onFinish={() => Alert.alert("finished")}
+                //on Finish call
+                size={10}
+              /> */}
+              <Image
+                source={require("../assets/icons/activity.png")}
+                style={{ height: 28, width: 28, resizeMode: "center" }}
+              />
+            </TouchableOpacity>
+          ),
         })}
+      />
+      <Stack.Screen
+        name="Activity"
+        component={Activity}
+        options={{
+          headerTitle: "Activity",
+          headerTitleAlign: "center",
+        }}
       />
       <Stack.Screen
         name="ShoppingBag"
@@ -254,6 +294,22 @@ function RootNavigator() {
           // headerTitleAlign: "center",
         }}
       />
+      <Stack.Screen
+        name="Myorders"
+        component={MyOrders}
+        options={{
+          headerTitle: "Orders",
+          // headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="Saved"
+        component={Saved}
+        options={{
+          headerTitle: "Saved",
+          headerTitleAlign: "center",
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -283,10 +339,19 @@ function SplashScreen(props) {
     const islog = await AsyncStorage.getItem("isLoggedIn");
     return islog;
   };
+  const [uid, setUID] = useState("");
+  const UID = async () => {
+    const UID = await AsyncStorage.getItem("UID");
+    return UID;
+  };
+
   useEffect(() => {
-    getStorageValue().then((res) => {
+    getStorageValue().then(async (res) => {
       if (res === "1") {
-        props.navigation.navigate("root");
+        await UID()
+          .then((res) => setUID(res))
+          .then(() => (global.UID = uid))
+          .then(() => props.navigation.navigate("root"));
       } else {
         props.navigation.navigate("Auth");
       }

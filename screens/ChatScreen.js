@@ -13,6 +13,7 @@ import {
 import ChatListItem from "../components/ChatListItem";
 import { FontAwesome5, AntDesign } from "@expo/vector-icons";
 import firebase from "../Firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ChatScreen(props) {
   const [data, setData] = useState([]);
@@ -22,6 +23,7 @@ export default function ChatScreen(props) {
 
   const FetchData = async () => {
     const uid = firebase.auth().currentUser.uid;
+    console.log(global.UID);
     await db
       .collection("users")
       .doc(uid)
@@ -61,16 +63,22 @@ export default function ChatScreen(props) {
         <Text style={{ alignSelf: "center", fontSize: 22, fontWeight: "bold" }}>
           Instyl
         </Text>
-        <Image
-          source={require("../assets/icons/bag.png")}
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate("Myorders")}
           style={{
-            height: 32,
-            width: 50,
-            resizeMode: "center",
             position: "absolute",
             right: 10,
           }}
-        />
+        >
+          <Image
+            source={require("../assets/icons/bag.png")}
+            style={{
+              height: 32,
+              width: 50,
+              resizeMode: "center",
+            }}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.searchbox}>
         <View style={styles.searchbox1}>
