@@ -18,6 +18,7 @@ const HomeScreen = ({ navigation }) => {
   const [modal, setModal] = useState(false);
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
+  const [liked, setLiked] = useState(false);
   const db = firebase.firestore();
 
   const fetchData = async () => {
@@ -47,6 +48,18 @@ const HomeScreen = ({ navigation }) => {
         const data = [];
         snapshot.forEach((doc) => data.push(doc.data()));
         setItems(data);
+      });
+  };
+
+  const likesystem = async (item) => {
+    db.collection("myStyle")
+      .doc("abcd")
+      .collection("categories")
+      .doc("abc")
+      .collection("items")
+      .doc(item.itemId)
+      .update({
+        itemLiked: !item.itemLiked,
       });
   };
 
@@ -160,18 +173,28 @@ const HomeScreen = ({ navigation }) => {
                         marginRight: 15,
                       }}
                     >
-                      <Ionicons
-                        name="heart-outline"
-                        size={32}
-                        color="black"
-                        style={styles.likeshare}
-                      />
-                      <Ionicons
-                        name="paper-plane-outline"
-                        size={30}
-                        color="black"
-                        style={styles.likeshare}
-                      />
+                      <TouchableOpacity
+                        onPress={() => {
+                          setLiked(!liked);
+                          // likesystem(item);
+                        }}
+                      >
+                        {liked ? (
+                          <Ionicons
+                            name="heart"
+                            size={32}
+                            color="red"
+                            style={styles.likeshare}
+                          />
+                        ) : (
+                          <Ionicons
+                            name="heart-outline"
+                            size={32}
+                            color="black"
+                            style={styles.likeshare}
+                          />
+                        )}
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </View>

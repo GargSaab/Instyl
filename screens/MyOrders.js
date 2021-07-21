@@ -90,7 +90,7 @@ function MyOrders(props) {
                     <View
                       style={{
                         flexDirection: "row",
-                        justifyContent: "space-around",
+                        justifyContent: "space-between",
                         margin: 2,
                         marginTop: 10,
                       }}

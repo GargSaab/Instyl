@@ -6,6 +6,7 @@ import {
   TextInput,
   Button,
   BackHandler,
+  TouchableOpacity,
 } from "react-native";
 import * as FirebaseRecaptcha from "expo-firebase-recaptcha";
 import * as firebase from "firebase";
@@ -46,24 +47,48 @@ function PhoneauthScreen(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
+      <View>
         <FirebaseRecaptcha.FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
           firebaseConfig={FIREBASE_CONFIG}
         />
-        <Text style={styles.text}>Enter phone number</Text>
-        <TextInput
-          style={styles.textInput}
-          autoCompleteType="tel"
-          keyboardType="phone-pad"
-          textContentType="telephoneNumber"
-          placeholder="+1 999 999 9999"
-          value={phoneNumber}
-          onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
-        />
-        <Button
-          title="Send OTP"
-          disabled={!phoneNumber}
+        <Text style={{ fontSize: 12, marginTop: 0, alignSelf: "center" }}>
+          Instyl will send an SMS message to verify your phone number
+        </Text>
+        <View
+          style={{
+            marginTop: 120,
+            alignItems: "center",
+          }}
+        >
+          <TextInput
+            style={{
+              borderBottomWidth: 1,
+              padding: 8,
+              fontSize: 18,
+              fontWeight: "bold",
+              width: "50%",
+            }}
+            autoCompleteType="tel"
+            keyboardType="phone-pad"
+            textContentType="telephoneNumber"
+            placeholder="+1 999 999 9999"
+            value={phoneNumber}
+            onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
+          />
+        </View>
+        <TouchableOpacity
+          // disabled={!phoneNumber}
+          style={{
+            backgroundColor: "black",
+            padding: 15,
+            justifyContent: "center",
+            alignItems: "center",
+            width: "40%",
+            alignSelf: "center",
+            borderRadius: 10,
+            marginTop: 90,
+          }}
           onPress={async () => {
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             try {
@@ -75,12 +100,15 @@ function PhoneauthScreen(props) {
               setVerificationId(verificationId);
               props.navigation.navigate("OTP", {
                 verificationId: verificationId,
+                phoneNumber: phoneNumber,
               });
             } catch (err) {
               setVerifyError(err);
             }
           }}
-        />
+        >
+          <Text style={{ color: "white", fontSize: 16 }}>Send OTP</Text>
+        </TouchableOpacity>
         {verifyError && (
           <Text style={styles.error}>{`Error: ${verifyError.message}`}</Text>
         )}
@@ -92,7 +120,7 @@ function PhoneauthScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: "white",
   },
   content: {
@@ -117,6 +145,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     padding: 8,
+    borderBottomWidth: 1,
   },
   error: {
     marginTop: 10,

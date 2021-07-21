@@ -321,7 +321,8 @@ function AuthNavigator() {
         name="Phoneauth"
         component={PhoneauthScreen}
         options={{
-          headerTitle: "",
+          headerTitle: "Enter your phone number",
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen

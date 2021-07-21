@@ -51,11 +51,12 @@ function ShoppingBagGroup(props) {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          borderBottomWidth: 2,
+          borderBottomWidth: 1,
           borderColor: "#CFCFCF",
           padding: 10,
           justifyContent: "space-around",
           flexWrap: "wrap",
+          marginHorizontal: 10,
         }}
       >
         <FontAwesome name="long-arrow-right" size={30} color="#47FFDE" />
@@ -130,14 +131,15 @@ function ShoppingBagGroup(props) {
           <View>
             <View
               style={{
-                borderBottomWidth: 2,
+                borderBottomWidth: 1,
                 borderColor: "#CFCFCF",
-                padding: 8,
+                marginHorizontal: 10,
+                paddingBottom: 10,
               }}
             >
               <View
                 style={{
-                  borderBottomWidth: 2,
+                  borderBottomWidth: 1,
                   borderColor: "#CFCFCF",
                   padding: 5,
                 }}
@@ -146,7 +148,13 @@ function ShoppingBagGroup(props) {
                   Selected Products :
                 </Text>
               </View>
-              <View style={{ marginTop: 10, flexDirection: "row" }}>
+              <View
+                style={{
+                  marginTop: 10,
+                  flexDirection: "row",
+                  marginHorizontal: 10,
+                }}
+              >
                 <Image
                   source={{ uri: item.itemImage }}
                   style={{ width: 150, height: 150 }}
@@ -162,15 +170,16 @@ function ShoppingBagGroup(props) {
             </View>
             <View
               style={{
-                borderBottomWidth: 2,
+                borderBottomWidth: 1,
                 borderColor: "#CFCFCF",
-                padding: 8,
                 marginTop: 15,
+                marginHorizontal: 10,
+                paddingBottom: 10,
               }}
             >
               <View
                 style={{
-                  borderBottomWidth: 2,
+                  borderBottomWidth: 1,
                   borderColor: "#CFCFCF",
                   padding: 5,
                 }}
@@ -187,9 +196,10 @@ function ShoppingBagGroup(props) {
             </View>
             <View
               style={{
-                borderBottomWidth: 2,
+                borderBottomWidth: 1,
                 borderColor: "#CFCFCF",
                 padding: 10,
+                marginHorizontal: 10,
               }}
             >
               <Text style={{ fontSize: 16, fontWeight: "bold" }}>
@@ -203,9 +213,10 @@ function ShoppingBagGroup(props) {
           <View>
             <View
               style={{
-                borderBottomWidth: 2,
+                borderBottomWidth: 1,
                 borderColor: "#CFCFCF",
                 padding: 10,
+                marginHorizontal: 10,
               }}
             >
               <Text style={{ fontSize: 16, fontWeight: "bold" }}>Address</Text>
@@ -274,6 +285,7 @@ function ShoppingBagGroup(props) {
                 borderBottomWidth: 1,
                 borderColor: "#CFCFCF",
                 padding: 10,
+                marginHorizontal: 10,
               }}
             >
               Select a payment methods:

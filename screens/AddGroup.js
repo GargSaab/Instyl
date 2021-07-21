@@ -109,11 +109,11 @@ function AddGroup(props) {
     });
     const storageRef = firebase.storage().ref(filename);
     const task = storageRef.put(blob);
-    task.on(firebase.storage.TaskEvent.STATE_CHANGED, (taskSnapshot) => {
-      console.log(
-        `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`
-      );
-    });
+    // task.on(firebase.storage.TaskEvent.STATE_CHANGED, (taskSnapshot) => {
+    //   console.log(
+    //     `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`
+    //   );
+    // });
     setModal(false);
     setLoading(true);
     await task;
@@ -240,11 +240,11 @@ function AddGroup(props) {
             visible={modal1}
             onDismiss={() => setModal1(false)}
             style={{
-              width: "100%",
-              height: "50%",
+              height: "40%",
               backgroundColor: "white",
               borderRadius: 20,
               top: "25%",
+              margin: 20,
             }}
             contentContainerStyle={{
               position: "absolute",
@@ -260,6 +260,7 @@ function AddGroup(props) {
                 padding: 5,
                 borderBottomWidth: 1,
                 borderColor: "#D9D9D9",
+                marginHorizontal: 10,
               }}
             >
               <Text
@@ -271,13 +272,15 @@ function AddGroup(props) {
                 Invite a friend to join your group
               </Text>
             </View>
-            <View
+            <ScrollView
+              horizontal={true}
+              contentContainerStyle={{
+                marginRight: 10,
+              }}
               style={{
                 flexDirection: "row",
                 flexWrap: "wrap",
                 padding: 10,
-                justifyContent: "center",
-                alignItems: "center",
               }}
             >
               <TouchableOpacity
@@ -378,7 +381,7 @@ function AddGroup(props) {
                   }}
                 />
               </TouchableOpacity>
-            </View>
+            </ScrollView>
             <View
               style={{
                 borderWidth: 1,
@@ -418,7 +421,7 @@ function AddGroup(props) {
               <Text
                 style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
               >
-                Create
+                Done
               </Text>
               {loading1 ? (
                 <ActivityIndicator style={{ marginLeft: 10 }} />
@@ -518,6 +521,7 @@ function AddGroup(props) {
             borderBottomWidth: 1,
             borderColor: "#D9D9D9",
             padding: 5,
+            marginHorizontal: 10,
           }}
         >
           Live groups:
@@ -530,12 +534,11 @@ function AddGroup(props) {
               data={data}
               renderItem={({ item }) => {
                 return (
-                  <TouchableOpacity
-                    style={{ flex: 1, margin: 5 }}
-                    onPress={() => sentinLiveGroup(item)}
-                  >
+                  <View style={{ flex: 1, margin: 5 }}>
                     <View>
-                      <View style={{ flexDirection: "row" }}>
+                      <View
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
                         <Image
                           source={{ uri: item.groupImage }}
                           style={{
@@ -550,9 +553,29 @@ function AddGroup(props) {
                             {item.groupName}
                           </Text>
                         </View>
+                        <TouchableOpacity
+                          style={{
+                            backgroundColor: "#FF2A2A",
+                            position: "absolute",
+                            right: 5,
+                            width: 100,
+                            height: 40,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRadius: 30,
+                          }}
+                          onPress={() => sentinLiveGroup(item)}
+                        >
+                          <Image
+                            source={require("../assets/icons/settle.png")}
+                            style={{
+                              resizeMode: "center",
+                            }}
+                          />
+                        </TouchableOpacity>
                       </View>
                     </View>
-                  </TouchableOpacity>
+                  </View>
                 );
               }}
               keyExtractor={(item) => item.groupName}
@@ -573,6 +596,7 @@ function AddGroup(props) {
             borderBottomWidth: 1,
             borderColor: "#D9D9D9",
             padding: 5,
+            marginHorizontal: 10,
           }}
         >
           Activate old groups:

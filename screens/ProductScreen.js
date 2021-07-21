@@ -7,6 +7,7 @@ import {
   ScrollView,
   LogBox,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import {
   Ionicons,
@@ -37,22 +38,17 @@ function ProductScreen(props) {
   };
 
   useEffect(() => {
-    if (item.itemSimilar.length > 0) {
-      item.itemSimilar.map((id) => {
-        db.collection("myStyle")
-          .doc("abcd")
-          .collection("categories")
-          .doc("abc")
-          .collection("items")
-          .doc(id)
-          .get()
-          .then((snapshot) => {
-            data.push(snapshot.data());
-            setSimilardata(data);
-            setLoading(true);
-          });
+    db.collection("similar")
+      .get()
+      .then((snapshot) => {
+        const data = [];
+        snapshot.forEach((item) => {
+          data.push(item.data());
+          console.log(item.data());
+        });
+        setSimilardata(data);
+        setLoading(true);
       });
-    }
   }, []);
   LogBox.ignoreAllLogs(true);
   return (
@@ -62,7 +58,7 @@ function ProductScreen(props) {
           width: "100%",
           flexDirection: "row",
           position: "absolute",
-          bottom: 5,
+          bottom: 0,
           height: 80,
           alignItems: "center",
           backgroundColor: "#fafafa",
@@ -80,6 +76,10 @@ function ProductScreen(props) {
             size={35}
             color="black"
             style={{ marginLeft: 25 }}
+            onPress={() => {
+              setSaved(!saved);
+              handleSaved();
+            }}
           />
         ) : (
           <FontAwesome
@@ -88,7 +88,7 @@ function ProductScreen(props) {
             color="black"
             style={{ marginLeft: 25 }}
             onPress={() => {
-              setSaved(true);
+              setSaved(!saved);
               handleSaved();
             }}
           />
@@ -108,7 +108,7 @@ function ProductScreen(props) {
         >
           <TouchableOpacity
             style={{
-              backgroundColor: "red",
+              backgroundColor: "#FDA5A5",
               padding: 10,
               borderRadius: 10,
               paddingHorizontal: 30,
@@ -128,7 +128,7 @@ function ProductScreen(props) {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              backgroundColor: "red",
+              backgroundColor: "#DB0000",
               justifyContent: "center",
               alignItems: "center",
               padding: 10,
@@ -180,6 +180,8 @@ function ProductScreen(props) {
             borderColor: "#D9D9D9",
             flexDirection: "row",
             alignItems: "center",
+            marginHorizontal: 20,
+            padding: 5,
           }}
           onPress={() => setSize(!size)}
         >
@@ -191,7 +193,7 @@ function ProductScreen(props) {
               color="black"
               style={{
                 position: "absolute",
-                right: 20,
+                right: 10,
               }}
             />
           ) : (
@@ -201,7 +203,7 @@ function ProductScreen(props) {
               color="black"
               style={{
                 position: "absolute",
-                right: 20,
+                right: 10,
               }}
             />
           )}
@@ -232,7 +234,9 @@ function ProductScreen(props) {
             borderColor: "#D9D9D9",
             flexDirection: "row",
             alignItems: "center",
+            marginHorizontal: 20,
             marginTop: 18,
+            padding: 5,
           }}
           onPress={() => setProductDetails(!ProductDetails)}
         >
@@ -244,7 +248,7 @@ function ProductScreen(props) {
               color="black"
               style={{
                 position: "absolute",
-                right: 20,
+                right: 10,
               }}
             />
           ) : (
@@ -254,7 +258,7 @@ function ProductScreen(props) {
               color="black"
               style={{
                 position: "absolute",
-                right: 20,
+                right: 10,
               }}
             />
           )}
@@ -272,6 +276,8 @@ function ProductScreen(props) {
             flexDirection: "row",
             alignItems: "center",
             marginTop: 18,
+            marginHorizontal: 20,
+            padding: 5,
           }}
           onPress={() => setShipping(!Shipping)}
         >
@@ -283,7 +289,7 @@ function ProductScreen(props) {
               color="black"
               style={{
                 position: "absolute",
-                right: 20,
+                right: 10,
               }}
             />
           ) : (
@@ -293,7 +299,7 @@ function ProductScreen(props) {
               color="black"
               style={{
                 position: "absolute",
-                right: 20,
+                right: 10,
               }}
             />
           )}
@@ -301,32 +307,45 @@ function ProductScreen(props) {
         <View style={{ display: Shipping ? "flex" : "none", margin: 15 }}>
           <Text style={{ fontSize: 15 }}>Saved Address</Text>
         </View>
-        <View style={{ margin: 20 }}>
-          {loading
-            ? similardata.map((item) => {
-                return (
-                  <View key={item.itemId}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                      People who bought this item also bought
-                    </Text>
-                    <Image
-                      source={{ uri: item.itemImage }}
-                      style={{ width: 200, height: 200, margin: 5 }}
-                    />
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: 15,
-                        marginLeft: 10,
-                      }}
-                    >
-                      {item.itemBrand}
-                    </Text>
-                  </View>
-                );
-              })
-            : null}
-        </View>
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "bold",
+            marginTop: 20,
+            marginHorizontal: 20,
+          }}
+        >
+          People who bought this item also bought
+        </Text>
+        <ScrollView
+          horizontal={true}
+          style={{ marginHorizontal: 10 }}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          {loading ? (
+            similardata.map((item) => {
+              return (
+                <View key={item.itemId} style={{ margin: 5, padding: 5 }}>
+                  <Image
+                    source={{ uri: item.itemImage }}
+                    style={{ width: 200, height: 200, margin: 5 }}
+                  />
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 15,
+                      marginLeft: 10,
+                    }}
+                  >
+                    {item.itemBrand}
+                  </Text>
+                </View>
+              );
+            })
+          ) : (
+            <ActivityIndicator />
+          )}
+        </ScrollView>
         <View style={{ height: 150 }}></View>
       </ScrollView>
     </View>

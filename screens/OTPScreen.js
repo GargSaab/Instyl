@@ -7,74 +7,103 @@ import {
   TextInput,
   Button,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import firebase from "../Firebase";
 
 function OTPScreen(props) {
-  const { verificationId } = props.route.params;
+  const { verificationId, phoneNumber } = props.route.params;
   const [verificationCode, setVerificationCode] = React.useState("");
   const [confirmError, setConfirmError] = React.useState();
   const [confirmInProgress, setConfirmInProgress] = React.useState(false);
   const db = firebase.firestore();
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.text}>Enter OTP</Text>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+          Verify {phoneNumber}
+        </Text>
+      </View>
+      <View
+        style={{
+          marginTop: 120,
+          alignItems: "center",
+        }}
+      >
         <TextInput
-          style={styles.textInput}
-          placeholder="123456"
+          style={{
+            borderBottomWidth: 1,
+            padding: 8,
+            fontSize: 18,
+            fontWeight: "bold",
+            width: "50%",
+            textAlign: "center",
+          }}
+          keyboardType="number-pad"
+          placeholder=""
           onChangeText={(verificationCode) =>
             setVerificationCode(verificationCode)
           }
         />
-        <Button
-          title="Confirm OTP"
-          disabled={!verificationCode}
-          onPress={async () => {
-            try {
-              setConfirmError(undefined);
-              setConfirmInProgress(true);
-              const credential = firebase.auth.PhoneAuthProvider.credential(
-                verificationId,
-                verificationCode
-              );
-              const authResult = await firebase
-                .auth()
-                .signInWithCredential(credential);
-              setConfirmInProgress(false);
-              setVerificationCode("");
-              if (authResult.additionalUserInfo.isNewUser) {
-                db.collection("users")
-                  .doc(`${authResult.user.uid}`)
-                  .set({
-                    uid: `${authResult.user.uid}`,
-                    name: "Instyl_user",
-                    number: `${authResult.user.phoneNumber}`,
-                    picture:
-                      "https://cdn.landesa.org/wp-content/uploads/default-user-image.png",
-                  });
-              }
-              AsyncStorage.setItem("isLoggedIn", "1");
-              AsyncStorage.setItem("UID", authResult.user.uid);
-              props.navigation.navigate("root");
-            } catch (err) {
-              setConfirmError(err);
-              setConfirmInProgress(false);
-            }
-          }}
-        />
-        {confirmError && (
-          <Text style={styles.error}>{`Error: ${confirmError.message}`}</Text>
-        )}
-        {confirmInProgress && <ActivityIndicator style={styles.loader} />}
+        <Text style={{ color: "#928B8B", margin: 5 }}>Enter 6-digit code</Text>
       </View>
+      <TouchableOpacity
+        style={{
+          backgroundColor: "black",
+          padding: 15,
+          justifyContent: "center",
+          alignItems: "center",
+          width: "40%",
+          alignSelf: "center",
+          borderRadius: 10,
+          marginTop: 90,
+        }}
+        onPress={async () => {
+          try {
+            setConfirmError(undefined);
+            setConfirmInProgress(true);
+            const credential = firebase.auth.PhoneAuthProvider.credential(
+              verificationId,
+              verificationCode
+            );
+            const authResult = await firebase
+              .auth()
+              .signInWithCredential(credential);
+            setConfirmInProgress(false);
+            setVerificationCode("");
+            if (authResult.additionalUserInfo.isNewUser) {
+              db.collection("users")
+                .doc(`${authResult.user.uid}`)
+                .set({
+                  uid: `${authResult.user.uid}`,
+                  name: "Instyl_user",
+                  number: `${authResult.user.phoneNumber}`,
+                  picture:
+                    "https://cdn.landesa.org/wp-content/uploads/default-user-image.png",
+                });
+            }
+            AsyncStorage.setItem("isLoggedIn", "1");
+            AsyncStorage.setItem("UID", authResult.user.uid);
+            props.navigation.navigate("root");
+          } catch (err) {
+            setConfirmError(err);
+            setConfirmInProgress(false);
+          }
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 16 }}>Confirm OTP</Text>
+      </TouchableOpacity>
+      {confirmError && (
+        <Text style={styles.error}>{`Error: ${confirmError.message}`}</Text>
+      )}
+      {confirmInProgress && <ActivityIndicator style={styles.loader} />}
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: "white",
   },
   content: {

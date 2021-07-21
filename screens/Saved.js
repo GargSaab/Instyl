@@ -42,19 +42,24 @@ function Saved(props) {
         contentContainerStyle={{
           flexDirection: "row",
           flexWrap: "wrap",
-
-          margin: 5,
+          alignItems: "center",
+          justifyContent: "center",
         }}
         renderItem={({ item }) => {
           return (
-            <View>
-              <View style={{ padding: 5 }}>
+            <View style={{ marginTop: 10 }}>
+              <View style={{ padding: 0, margin: 2, height: 270, width: 180 }}>
                 <Image
                   source={{ uri: item.itemImage }}
-                  style={{ height: 200, width: 180, resizeMode: "cover" }}
+                  style={{ height: 180, width: 160, resizeMode: "cover" }}
                 />
                 <View style={{ marginTop: 5, padding: 5 }}>
-                  <Text style={{ fontSize: 12, fontWeight: "bold" }}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontWeight: "bold",
+                    }}
+                  >
                     {item.itemBrand}
                   </Text>
                   <Text style={{ fontSize: 12 }}>{item.itemTitle}</Text>

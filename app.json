@@ -2,7 +2,7 @@
   "expo": {
     "name": "Instyl",
     "slug": "Instyl",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "orientation": "portrait",
     "sdkVersion": "41.0.0",
     "icon": "./assets/images/icon.png",
@@ -24,7 +24,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.keshav_garg.Instyl"
+      "package": "com.keshavgarg.Instyl"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

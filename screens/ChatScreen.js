@@ -23,7 +23,6 @@ export default function ChatScreen(props) {
 
   const FetchData = async () => {
     const uid = firebase.auth().currentUser.uid;
-    console.log(global.UID);
     await db
       .collection("users")
       .doc(uid)

@@ -50,11 +50,11 @@ function EditProfileScreen(props) {
 
     const storageRef = firebase.storage().ref(filename);
     const task = storageRef.put(blob);
-    task.on(firebase.storage.TaskEvent.STATE_CHANGED, (taskSnapshot) => {
-      console.log(
-        `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`
-      );
-    });
+    // task.on(firebase.storage.TaskEvent.STATE_CHANGED, (taskSnapshot) => {
+    //   console.log(
+    //     `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`
+    //   );
+    // });
     setModal(false);
     setLoading(true);
     await task;
