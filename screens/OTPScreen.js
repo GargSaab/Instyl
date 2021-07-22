@@ -39,13 +39,27 @@ function OTPScreen(props) {
             width: "50%",
             textAlign: "center",
           }}
+          value={verificationCode}
           keyboardType="number-pad"
           placeholder=""
-          onChangeText={(verificationCode) =>
-            setVerificationCode(verificationCode)
-          }
+          onChangeText={(verificationCode) => {
+            if (verificationCode.length <= 6) {
+              setVerificationCode(verificationCode);
+            }
+          }}
         />
         <Text style={{ color: "#928B8B", margin: 5 }}>Enter 6-digit code</Text>
+        {confirmError && (
+          <Text
+            style={{
+              marginTop: 15,
+              fontWeight: "bold",
+              color: "red",
+              alignSelf: "center",
+              fontSize: 18,
+            }}
+          >{`Wrong OTP`}</Text>
+        )}
       </View>
       <TouchableOpacity
         style={{
@@ -93,9 +107,7 @@ function OTPScreen(props) {
       >
         <Text style={{ color: "white", fontSize: 16 }}>Confirm OTP</Text>
       </TouchableOpacity>
-      {confirmError && (
-        <Text style={styles.error}>{`Error: ${confirmError.message}`}</Text>
-      )}
+
       {confirmInProgress && <ActivityIndicator style={styles.loader} />}
     </View>
   );

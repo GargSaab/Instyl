@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
 import firebase from "../Firebase";
 import { Checkbox } from "react-native-paper";
+import { Feather, AntDesign, FontAwesome } from "@expo/vector-icons";
 
 function ShoppingBagGroup(props) {
   const { item } = props.route.params;
@@ -268,6 +268,18 @@ function ShoppingBagGroup(props) {
                         <Text>
                           {item.city}, {item.state}
                         </Text>
+                        <Feather
+                          name="edit-2"
+                          size={22}
+                          color="black"
+                          style={{ position: "absolute", right: 40, top: 10 }}
+                        />
+                        <AntDesign
+                          name="delete"
+                          size={22}
+                          color="black"
+                          style={{ position: "absolute", right: 8, top: 10 }}
+                        />
                       </View>
                     );
                   }}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Alert, FlatList, ScrollView, TextInput } from "react-native";
-import { CommonActions } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -92,21 +91,10 @@ function AddGroup(props) {
 
   const handleUpload = async (image) => {
     const uploaduri = image.uri;
-
     let filename = uploaduri.split("/")[11];
+    const response = await fetch(uploaduri);
+    const blob = await response.blob();
 
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function () {
-        reject(new TypeError("Network request failed"));
-      };
-      xhr.responseType = "blob";
-      xhr.open("GET", uploaduri, true);
-      xhr.send(null);
-    });
     const storageRef = firebase.storage().ref(filename);
     const task = storageRef.put(blob);
     // task.on(firebase.storage.TaskEvent.STATE_CHANGED, (taskSnapshot) => {
@@ -546,6 +534,8 @@ function AddGroup(props) {
                             height: 60,
                             borderRadius: 50,
                             marginRight: 15,
+                            borderWidth: 1,
+                            borderColor: "black",
                           }}
                         />
                         <View style={{ justifyContent: "space-around" }}>

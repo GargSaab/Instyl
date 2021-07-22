@@ -27,7 +27,6 @@ function ProductScreen(props) {
   const [similardata, setSimilardata] = useState([]);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
-  const data = [];
   const db = firebase.firestore();
 
   const handleSaved = async () => {
@@ -44,7 +43,6 @@ function ProductScreen(props) {
         const data = [];
         snapshot.forEach((item) => {
           data.push(item.data());
-          console.log(item.data());
         });
         setSimilardata(data);
         setLoading(true);
@@ -93,12 +91,21 @@ function ProductScreen(props) {
             }}
           />
         )}
-        <AntDesign
-          name="hearto"
-          size={35}
-          color="black"
-          style={{ marginLeft: 20 }}
-        />
+        {item.itemLiked ? (
+          <Ionicons
+            name="heart"
+            size={40}
+            color="red"
+            style={{ marginLeft: 20 }}
+          />
+        ) : (
+          <Ionicons
+            name="heart-outline"
+            size={40}
+            color="black"
+            style={{ marginLeft: 20 }}
+          />
+        )}
         <View
           style={{
             flexDirection: "row",
@@ -128,7 +135,7 @@ function ProductScreen(props) {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              backgroundColor: "#DB0000",
+              backgroundColor: "#f05451",
               justifyContent: "center",
               alignItems: "center",
               padding: 10,

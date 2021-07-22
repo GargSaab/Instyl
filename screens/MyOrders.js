@@ -17,7 +17,7 @@ function MyOrders(props) {
   const db = firebase.firestore();
 
   const FetchData = async () => {
-    const uid = firebase.auth().currentUser.uid;
+    const uid = global.UID;
     await db
       .collection("users")
       .doc(uid)
@@ -57,7 +57,7 @@ function MyOrders(props) {
                 <View
                   style={{
                     borderWidth: 1,
-                    padding: 15,
+                    padding: 8,
                     flexDirection: "row",
                     borderColor: "#E5E5E5",
                     borderRadius: 20,
@@ -90,7 +90,7 @@ function MyOrders(props) {
                     <View
                       style={{
                         flexDirection: "row",
-                        justifyContent: "space-between",
+                        // justifyContent: "space-between",
                         margin: 2,
                         marginTop: 10,
                       }}
@@ -119,6 +119,7 @@ function MyOrders(props) {
                           backgroundColor: "#FDA5A5",
                           borderRadius: 10,
                           paddingHorizontal: 15,
+                          marginLeft: 12,
                         }}
                       >
                         <Text

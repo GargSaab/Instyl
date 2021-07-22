@@ -9,7 +9,7 @@ import {
   FlatList,
   Image,
 } from "react-native";
-import { Modal } from "react-native-paper";
+import { ActivityIndicator, Modal } from "react-native-paper";
 import firebase from "../Firebase";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
@@ -18,18 +18,20 @@ const HomeScreen = ({ navigation }) => {
   const [modal, setModal] = useState(false);
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
-  const [liked, setLiked] = useState(false);
+  const [loading, setLoading] = useState(true);
   const db = firebase.firestore();
 
   const fetchData = async () => {
-    db.collection("myStyle")
+    await db
+      .collection("myStyle")
       .get()
       .then((snapshot) => {
         const data = [];
         snapshot.forEach((doc) => data.push(doc.data()));
         setData(data);
       });
-    db.collection("myStyle")
+    await db
+      .collection("myStyle")
       .doc("abcd")
       .collection("categories")
       .get()
@@ -38,7 +40,8 @@ const HomeScreen = ({ navigation }) => {
         snapshot.forEach((doc) => data.push(doc.data()));
         setCategories(data);
       });
-    db.collection("myStyle")
+    await db
+      .collection("myStyle")
       .doc("abcd")
       .collection("categories")
       .doc("abc")
@@ -49,10 +52,12 @@ const HomeScreen = ({ navigation }) => {
         snapshot.forEach((doc) => data.push(doc.data()));
         setItems(data);
       });
+    setLoading(false);
   };
 
   const likesystem = async (item) => {
-    db.collection("myStyle")
+    await db
+      .collection("myStyle")
       .doc("abcd")
       .collection("categories")
       .doc("abc")
@@ -61,6 +66,7 @@ const HomeScreen = ({ navigation }) => {
       .update({
         itemLiked: !item.itemLiked,
       });
+    fetchData();
   };
 
   useEffect(() => {
@@ -73,138 +79,146 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1 }}>
-        <View style={styles.headerview}>
-          <TouchableOpacity
+      <View style={styles.headerview}>
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={() => setModal(true)}
+        >
+          <Text style={{ fontSize: 15, marginLeft: 5, marginRight: 5 }}>
+            My Style
+          </Text>
+          <AntDesign name="down" size={18} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.instyltitle}>Instyl</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Myorders")}
+          style={{
+            position: "absolute",
+            right: 10,
+          }}
+        >
+          <Image
+            source={require("../assets/icons/bag.png")}
             style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
+              height: 32,
+              width: 50,
+              resizeMode: "center",
             }}
-            onPress={() => setModal(true)}
-          >
-            <Text style={{ fontSize: 15, marginLeft: 5, marginRight: 5 }}>
-              My Style
-            </Text>
-            <AntDesign name="down" size={18} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.instyltitle}>Instyl</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Myorders")}
-            style={{
-              position: "absolute",
-              right: 10,
-            }}
-          >
-            <Image
-              source={require("../assets/icons/bag.png")}
-              style={{
-                height: 32,
-                width: 50,
-                resizeMode: "center",
-              }}
-            />
-          </TouchableOpacity>
+          />
+        </TouchableOpacity>
+      </View>
+      {loading ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator />
         </View>
-        <View style={{ marginTop: 5 }}>
-          <FlatList
-            horizontal
-            data={categories}
-            renderItem={({ item }) => {
-              return (
-                <View
-                  style={{
-                    margin: 5,
-                    backgroundColor: item.docId == "abc" ? "black" : "white",
-                    borderRadius: 10,
-                    padding: 5,
-                  }}
-                >
-                  <Text
+      ) : (
+        <View style={{ flex: 1 }}>
+          <View style={{ marginTop: 5 }}>
+            <FlatList
+              horizontal
+              data={categories}
+              renderItem={({ item }) => {
+                return (
+                  <View
                     style={{
-                      fontSize: 15,
-                      color: item.docId == "abc" ? "white" : "black",
+                      margin: 5,
+                      backgroundColor: item.docId == "abc" ? "black" : "white",
+                      borderRadius: 10,
+                      padding: 5,
                     }}
                   >
-                    {item.docName}
-                  </Text>
-                </View>
-              );
-            }}
-            keyExtractor={(item) => item.docId}
-            style={{ marginLeft: 5, marginBottom: 1 }}
-          />
-        </View>
-        <View style={{ flex: 1 }}>
-          <FlatList
-            showsVerticalScrollIndicator
-            data={items}
-            renderItem={({ item }) => {
-              return (
-                <View style={{ marginTop: 10 }}>
-                  <TouchableWithoutFeedback
-                    onPress={() =>
-                      navigation.navigate("ProductPage", { item: item })
-                    }
-                  >
-                    <Image
-                      source={{ uri: item.itemImage }}
+                    <Text
                       style={{
-                        width: "100%",
-                        height: 350,
-                        resizeMode: "cover",
-                      }}
-                    />
-                  </TouchableWithoutFeedback>
-                  <View style={{ flexDirection: "row" }}>
-                    <View style={{ marginLeft: 10 }}>
-                      <Text style={{ fontWeight: "bold" }}>
-                        {item.itemBrand}
-                      </Text>
-                      <Text>{item.itemTitle}</Text>
-                      <Text style={{ color: "red" }}>Price</Text>
-                    </View>
-                    <View
-                      style={{
-                        justifyContent: "flex-end",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        flex: 1,
-                        marginRight: 15,
+                        fontSize: 15,
+                        color: item.docId == "abc" ? "white" : "black",
                       }}
                     >
-                      <TouchableOpacity
-                        onPress={() => {
-                          setLiked(!liked);
-                          // likesystem(item);
+                      {item.docName}
+                    </Text>
+                  </View>
+                );
+              }}
+              keyExtractor={(item) => item.docId}
+              style={{ marginLeft: 5, marginBottom: 1 }}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <FlatList
+              showsVerticalScrollIndicator
+              data={items}
+              renderItem={({ item }) => {
+                return (
+                  <View style={{ marginTop: 10 }}>
+                    <TouchableWithoutFeedback
+                      onPress={() =>
+                        navigation.navigate("ProductPage", { item: item })
+                      }
+                    >
+                      <Image
+                        source={{ uri: item.itemImage }}
+                        style={{
+                          width: "100%",
+                          height: 350,
+                          resizeMode: "cover",
+                        }}
+                      />
+                    </TouchableWithoutFeedback>
+                    <View style={{ flexDirection: "row" }}>
+                      <View style={{ marginLeft: 10 }}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          {item.itemBrand}
+                        </Text>
+                        <Text>{item.itemTitle}</Text>
+                        <Text style={{ color: "red" }}>Price</Text>
+                      </View>
+                      <View
+                        style={{
+                          justifyContent: "flex-end",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          flex: 1,
+                          marginRight: 15,
                         }}
                       >
-                        {liked ? (
-                          <Ionicons
-                            name="heart"
-                            size={32}
-                            color="red"
-                            style={styles.likeshare}
-                          />
-                        ) : (
-                          <Ionicons
-                            name="heart-outline"
-                            size={32}
-                            color="black"
-                            style={styles.likeshare}
-                          />
-                        )}
-                      </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            // setLiked(!liked);
+                            likesystem(item);
+                          }}
+                        >
+                          {item.itemLiked ? (
+                            <Ionicons
+                              name="heart"
+                              size={32}
+                              color="red"
+                              style={styles.likeshare}
+                            />
+                          ) : (
+                            <Ionicons
+                              name="heart-outline"
+                              size={32}
+                              color="black"
+                              style={styles.likeshare}
+                            />
+                          )}
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
-                </View>
-              );
-            }}
-            keyExtractor={(item) => item.itemId}
-            style={{ marginBottom: 10 }}
-          />
+                );
+              }}
+              keyExtractor={(item) => item.itemId}
+              style={{ marginBottom: 10 }}
+            />
+          </View>
         </View>
-      </View>
+      )}
       <Modal
         visible={modal}
         onDismiss={() => setModal(false)}

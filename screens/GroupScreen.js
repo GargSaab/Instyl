@@ -11,18 +11,17 @@ import {
   StatusBar,
 } from "react-native";
 import ChatListItem from "../components/ChatListItem";
-import { FontAwesome5, AntDesign } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import firebase from "../Firebase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function ChatScreen(props) {
+export default function GroupScreen(props) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const db = firebase.firestore();
 
   const FetchData = async () => {
-    const uid = firebase.auth().currentUser.uid;
+    const uid = global.UID;
     await db
       .collection("users")
       .doc(uid)

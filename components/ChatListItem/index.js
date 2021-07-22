@@ -10,10 +10,7 @@ const ChatListItem = (props) => {
 
   const OnClick = () => {
     navigation.navigate("GroupCart", {
-      // id: item.docId,
-      // docid: item.groupId,
       groupName: item.groupName,
-      // image: item.groupImage,
       item: item,
     });
   };

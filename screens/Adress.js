@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View, Text, FlatList } from "react-native";
 import firebase from "../Firebase";
+import { Feather, AntDesign } from "@expo/vector-icons";
 
 function Adress(props) {
   const [data, setData] = useState("");
   const db = firebase.firestore();
 
   const fetchdata = async () => {
-    const uid = await firebase.auth().currentUser.uid;
+    const uid = global.UID;
     db.collection("users")
       .doc(uid)
       .collection("Address")
@@ -55,6 +56,18 @@ function Adress(props) {
                 <Text>
                   {item.city}, {item.state}
                 </Text>
+                <Feather
+                  name="edit-2"
+                  size={22}
+                  color="black"
+                  style={{ position: "absolute", right: 40, top: 10 }}
+                />
+                <AntDesign
+                  name="delete"
+                  size={22}
+                  color="black"
+                  style={{ position: "absolute", right: 8, top: 10 }}
+                />
               </View>
             );
           }}

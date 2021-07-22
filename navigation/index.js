@@ -3,22 +3,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Alert, Image, Modal, Text, View } from "react-native";
-import ChatRoomScreen from "../screens/ChatRoomScreen";
-import {
-  MaterialCommunityIcons,
-  FontAwesome5,
-  SimpleLineIcons,
-  Ionicons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { Image, View, TouchableOpacity } from "react-native";
 
 import BottomTabNavigator from "./BottomTabNavigator";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import EditGroupInfoScreen from "../screens/EditGroupInfoScreen";
-import CreateGroupsScreen from "../screens/CreateGroupsScreen";
-import ChangeGroupImageScreen from "../screens/ChangeGroupImageScreen";
-import EditGroupNameScreen from "../screens/EditGroupNameScreen";
 import ProductScreen from "../screens/ProductScreen";
 import ShoppingBagScreen from "../screens/ShoppingBagScreen";
 import PhoneauthScreen from "../screens/PhoneauthScreen";
@@ -31,10 +18,8 @@ import ShoppingBagGroup from "../screens/ShoppingBagGroup";
 import AddGroup from "../screens/AddGroup";
 import Adress from "../screens/Adress";
 import Addnewadress from "../screens/AddNewAdress";
-import firebase from "../Firebase";
 import MyOrders from "../screens/MyOrders";
 import Saved from "../screens/Saved";
-import CountDown from "react-native-countdown-component";
 import Activity from "../screens/Activity";
 
 const Drawer = createDrawerNavigator();
@@ -61,128 +46,6 @@ function RootNavigator() {
         component={BottomTabNavigator}
         options={{
           headerShown: false,
-          // title: "Instyl",
-          // headerRight: () => (
-          //   <Image
-          //     source={require("../icons/cart.jpeg")}
-          //     style={{ width: 50, height: 30, right: 10 }}
-          //   />
-          // ),
-          // headerTitleAlign: "center",
-        }}
-      />
-      <Stack.Screen
-        name="ChatRoomScreen"
-        component={ChatRoomScreen}
-        options={({ route, navigation }) => ({
-          headerTitleStyle: { display: "none" },
-
-          headerLeft: () => (
-            <View
-              style={{
-                flexDirection: "row",
-                marginLeft: 6,
-                alignItems: "center",
-              }}
-            >
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Ionicons name="arrow-back-outline" size={24} color="black" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ flexDirection: "row", alignItems: "center" }}
-                onPress={() =>
-                  navigation.navigate("EditGroupInfo", {
-                    name: route.params.name,
-                    image: route.params.image,
-                    id: route.params.id,
-                    groupId: route.params.docid,
-                  })
-                }
-              >
-                <Image
-                  source={{ uri: route.params.image }}
-                  style={{
-                    width: 45,
-                    height: 45,
-                    borderRadius: 30,
-                  }}
-                />
-                <Text
-                  style={{ marginLeft: 8, fontSize: 18, fontWeight: "bold" }}
-                >
-                  {route.params.name}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ),
-          headerRight: () => (
-            <View
-              style={{
-                flexDirection: "row",
-                width: 110,
-                justifyContent: "space-between",
-                marginRight: 10,
-              }}
-            >
-              <MaterialCommunityIcons
-                name="bookmark-minus-outline"
-                size={32}
-                color="black"
-              />
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("GroupCart", {
-                    groupName: route.params.name,
-                  })
-                }
-              >
-                <FontAwesome5 name="shopping-bag" size={27} color="black" />
-              </TouchableOpacity>
-              <SimpleLineIcons
-                name="options-vertical"
-                size={26}
-                color="black"
-              />
-            </View>
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="EditGroupInfo"
-        component={EditGroupInfoScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="ChangeGroupIcon"
-        component={ChangeGroupImageScreen}
-        options={{
-          headerTitle: "Group Icon",
-          headerStyle: {
-            backgroundColor: "black",
-          },
-          headerTintColor: "white",
-          headerRight: () => (
-            <TouchableOpacity style={{ marginRight: 15 }}>
-              <MaterialIcons name="edit" size={28} color="white" />
-            </TouchableOpacity>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="EditGroupName"
-        component={EditGroupNameScreen}
-        options={{
-          headerTitle: "Enter new name",
-        }}
-      />
-      <Stack.Screen
-        name="CreateGroups"
-        component={CreateGroupsScreen}
-        options={{
-          headerTitle: "Create a group",
-          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -190,51 +53,6 @@ function RootNavigator() {
         component={ProductScreen}
         options={{
           headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="GroupCart"
-        component={GroupCartScreen}
-        options={({ navigation, route }) => ({
-          headerShown: true,
-          headerTitle: `${route.params.groupName}'s cart`,
-          // headerTitleAlign: "center",
-          headerRight: () => (
-            <TouchableOpacity
-              style={{
-                marginRight: 15,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={() =>
-                navigation.navigate("Activity", {
-                  groupName: route.params.groupName,
-                })
-              }
-            >
-              {/* <CountDown
-                until={86400}
-                //duration of countdown in seconds
-                timetoShow={("H", "M", "S")}
-                //formate to show
-                onFinish={() => Alert.alert("finished")}
-                //on Finish call
-                size={10}
-              /> */}
-              <Image
-                source={require("../assets/icons/activity.png")}
-                style={{ height: 28, width: 28, resizeMode: "center" }}
-              />
-            </TouchableOpacity>
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="Activity"
-        component={Activity}
-        options={{
-          headerTitle: "Activity",
-          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -262,6 +80,43 @@ function RootNavigator() {
           headerShown: false,
         }}
       />
+
+      <Stack.Screen
+        name="GroupCart"
+        component={GroupCartScreen}
+        options={({ navigation, route }) => ({
+          headerShown: true,
+          headerTitle: `${route.params.groupName}'s cart`,
+          headerRight: () => (
+            <TouchableOpacity
+              style={{
+                marginRight: 15,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={() =>
+                navigation.navigate("Activity", {
+                  groupName: route.params.groupName,
+                })
+              }
+            >
+              <Image
+                source={require("../assets/icons/activity.png")}
+                style={{ height: 28, width: 28, resizeMode: "center" }}
+              />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Activity"
+        component={Activity}
+        options={{
+          headerTitle: "Activity",
+          headerTitleAlign: "center",
+        }}
+      />
+
       <Stack.Screen
         name="EditProfile"
         component={EditProfileScreen}
@@ -275,7 +130,6 @@ function RootNavigator() {
         component={Adress}
         options={{
           headerTitle: "Address",
-          // headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -283,7 +137,6 @@ function RootNavigator() {
         component={Addnewadress}
         options={{
           headerTitle: "Add a new address",
-          // headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -291,7 +144,6 @@ function RootNavigator() {
         component={ContactusScreen}
         options={{
           headerTitle: "Contact Us",
-          // headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -299,7 +151,6 @@ function RootNavigator() {
         component={MyOrders}
         options={{
           headerTitle: "Orders",
-          // headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -314,9 +165,10 @@ function RootNavigator() {
   );
 }
 
+const AuthStack = createStackNavigator();
 function AuthNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Phoneauth">
+    <AuthStack.Navigator initialRouteName="Phoneauth">
       <Stack.Screen
         name="Phoneauth"
         component={PhoneauthScreen}
@@ -332,9 +184,10 @@ function AuthNavigator() {
           headerTitle: "",
         }}
       />
-    </Stack.Navigator>
+    </AuthStack.Navigator>
   );
 }
+
 function SplashScreen(props) {
   const getStorageValue = async () => {
     const islog = await AsyncStorage.getItem("isLoggedIn");

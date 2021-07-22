@@ -23,14 +23,14 @@ function ProfileScreen(props) {
         routes: [{ name: "Auth" }],
       })
     );
-    // await props.navigation.navigate("Auth", { screen: "Phoneauth" });
     firebase.auth().signOut();
   };
 
   const [userdata, setUserdata] = useState("");
   const fetchData = () => {
+    const uid = global.UID;
     const db = firebase.firestore();
-    const uid = firebase.auth().currentUser.uid;
+
     db.collection("users")
       .doc(uid)
       .get()
@@ -218,7 +218,7 @@ function ProfileScreen(props) {
           position: "absolute",
           backgroundColor: "white",
           bottom: 0,
-          paddingVertical: 80,
+          paddingVertical: 50,
           width: "100%",
           justifyContent: "center",
           alignItems: "center",

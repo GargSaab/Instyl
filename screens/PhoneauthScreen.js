@@ -35,15 +35,15 @@ function PhoneauthScreen(props) {
   const [verifyError, setVerifyError] = React.useState();
   const [verificationId, setVerificationId] = React.useState("");
 
-  React.useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        BackHandler.exitApp();
-      }
-    );
-    return () => backHandler.remove();
-  }, []);
+  // React.useEffect(() => {
+  //   const backHandler = BackHandler.addEventListener(
+  //     "hardwareBackPress",
+  //     () => {
+  //       BackHandler.exitApp();
+  //     }
+  //   );
+  //   return () => backHandler.remove();
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -74,7 +74,11 @@ function PhoneauthScreen(props) {
             textContentType="telephoneNumber"
             placeholder="+1 999 999 9999"
             value={phoneNumber}
-            onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
+            onChangeText={(phoneNumber) => {
+              if (phoneNumber.length <= 14) {
+                setPhoneNumber(phoneNumber);
+              }
+            }}
           />
         </View>
         <TouchableOpacity

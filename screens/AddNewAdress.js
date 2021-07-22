@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import firebase from "../Firebase";
 
@@ -21,18 +22,30 @@ function Addnewadress(props) {
   const db = firebase.firestore();
 
   const handlesubmit = async () => {
-    const uid = await firebase.auth().currentUser.uid;
-    await db.collection("users").doc(uid).collection("Address").add({
-      name,
-      number,
-      pincode,
-      add1,
-      add2,
-      add3,
-      city,
-      state,
-    });
-    props.navigation.goBack();
+    if (name === "") {
+      Alert.alert("Enter your name");
+    } else if (number.length < 10) {
+      Alert.alert("Incorrect mobile number");
+    } else if (pincode.length < 6) {
+      Alert.alert("Incorrect pincode");
+    } else if (city === "") {
+      Alert.alert("Enter city");
+    } else if (State === "") {
+      Alert.alert("Enter state");
+    } else {
+      const uid = global.UID;
+      await db.collection("users").doc(uid).collection("Address").add({
+        name,
+        number,
+        pincode,
+        add1,
+        add2,
+        add3,
+        city,
+        state,
+      });
+      props.navigation.goBack();
+    }
   };
   return (
     <ScrollView style={{ backgroundColor: "white", flex: 1, padding: 5 }}>
@@ -66,7 +79,11 @@ function Addnewadress(props) {
               borderRadius: 10,
               borderColor: "#CFCFCF",
             }}
-            onChangeText={(text) => setNumber(text)}
+            onChangeText={(text) => {
+              if (text.length <= 10) {
+                setNumber(text);
+              }
+            }}
             placeholder="10-digit mobile number without prefixes"
             keyboardType="number-pad"
           />
@@ -83,7 +100,11 @@ function Addnewadress(props) {
               borderRadius: 10,
               borderColor: "#CFCFCF",
             }}
-            onChangeText={(text) => setPincode(text)}
+            onChangeText={(text) => {
+              if (text.length <= 6) {
+                setPincode(text);
+              }
+            }}
             placeholder="6 digits [0-9] PIN code "
             keyboardType="number-pad"
           />

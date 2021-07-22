@@ -2,7 +2,7 @@
   "expo": {
     "name": "Instyl",
     "slug": "Instyl",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "sdkVersion": "41.0.0",
     "icon": "./assets/images/icon.png",
@@ -10,7 +10,7 @@
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
+      "resizeMode":"contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {

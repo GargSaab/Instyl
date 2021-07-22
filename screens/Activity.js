@@ -12,6 +12,21 @@ function Activity(props) {
         >
           You joined {groupName} group
         </Text>
+        <Text
+          style={{ fontSize: 15, marginLeft: 5, padding: 5, color: "green" }}
+        >
+          Nitin joined {groupName} group
+        </Text>
+        <Text
+          style={{ fontSize: 15, marginLeft: 5, padding: 5, color: "green" }}
+        >
+          Megha joined {groupName} group
+        </Text>
+        <Text
+          style={{ fontSize: 15, marginLeft: 5, padding: 5, color: "green" }}
+        >
+          Lokesh joined {groupName} group
+        </Text>
       </View>
     </View>
   );

@@ -5,7 +5,7 @@ import { Foundation, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
-import ChatScreen from "../screens/ChatScreen";
+import GroupScreen from "../screens/GroupScreen";
 import ProfileScreen from "../screens/ProfieScreen";
 import HomeScreen from "../screens/HomeScreen";
 
@@ -16,7 +16,7 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Groups"
+      initialRouteName="Home"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
     >
       <BottomTab.Screen
@@ -77,7 +77,7 @@ function TabOneNavigator() {
     <Stack.Navigator>
       <Stack.Screen
         name="ChatScreen"
-        component={ChatScreen}
+        component={GroupScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

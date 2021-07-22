@@ -7,7 +7,7 @@ function Saved(props) {
   const db = firebase.firestore();
 
   const fetchData = async () => {
-    const uid = await firebase.auth().currentUser.uid;
+    const uid = global.UID;
     await db
       .collection("users")
       .doc(uid)
@@ -43,12 +43,12 @@ function Saved(props) {
           flexDirection: "row",
           flexWrap: "wrap",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "space-around",
         }}
         renderItem={({ item }) => {
           return (
             <View style={{ marginTop: 10 }}>
-              <View style={{ padding: 0, margin: 2, height: 270, width: 180 }}>
+              <View style={{ padding: 0, height: 270, width: 160 }}>
                 <Image
                   source={{ uri: item.itemImage }}
                   style={{ height: 180, width: 160, resizeMode: "cover" }}

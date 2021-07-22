@@ -34,27 +34,12 @@ function EditProfileScreen(props) {
   const handleUpload = async (image) => {
     const uploaduri = image.uri;
     let filename = uploaduri.split("/")[11];
-
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function () {
-        reject(new TypeError("Network request failed"));
-      };
-      xhr.responseType = "blob";
-      xhr.open("GET", uploaduri, true);
-      xhr.send(null);
-    });
+    const response = await fetch(uploaduri);
+    const blob = await response.blob();
 
     const storageRef = firebase.storage().ref(filename);
     const task = storageRef.put(blob);
-    // task.on(firebase.storage.TaskEvent.STATE_CHANGED, (taskSnapshot) => {
-    //   console.log(
-    //     `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`
-    //   );
-    // });
+
     setModal(false);
     setLoading(true);
     await task;
@@ -64,7 +49,6 @@ function EditProfileScreen(props) {
   };
 
   const Pickfromgallery = async () => {
-    // const { granted } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     let permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted) {
@@ -80,7 +64,7 @@ function EditProfileScreen(props) {
           type: `test/${data.uri.split(".")[1]}`,
           name: `test/${data.uri.split(".")[1]}`,
         };
-        handleUpload(newfile);
+        await handleUpload(newfile);
       }
     } else {
       Alert.alert("You need to give permission to access ");
