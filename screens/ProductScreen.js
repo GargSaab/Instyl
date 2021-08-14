@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  LogBox,
   Alert,
   ActivityIndicator,
 } from "react-native";
@@ -48,7 +47,6 @@ function ProductScreen(props) {
         setLoading(true);
       });
   }, []);
-  LogBox.ignoreAllLogs(true);
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <View

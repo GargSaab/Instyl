@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import * as FirebaseRecaptcha from "expo-firebase-recaptcha";
-import * as firebase from "firebase";
+import firebase from "firebase";
 
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyAGqbgVKa0QwCrjtt64tUs8VqRRNdK1A2g",

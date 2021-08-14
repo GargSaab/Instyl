@@ -45,6 +45,7 @@ function AddGroup(props) {
         setLoading2(false);
       });
   };
+  
   useEffect(() => {
     FetchData();
     const willFocusSubscription = props.navigation.addListener("focus", () => {
